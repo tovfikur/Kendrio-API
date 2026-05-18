@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── RPC Log list / form / search ──────────────────────────────── -->
+
+    <record id="view_kendrio_rpc_log_list" model="ir.ui.view">
+        <field name="name">kendrio.rpc.log.list</field>
+        <field name="model">kendrio.rpc.log</field>
+        <field name="arch" type="xml">
+            <tree string="RPC Logs" default_order="id desc"
+                  decoration-danger="error != False and error != ''"
+                  decoration-muted="error == False or error == ''">
+                <field name="create_date" string="Time"/>
+                <field name="user_id"/>
+                <field name="model"/>
+                <field name="method"/>
+                <field name="duration" string="s" widget="float" digits="[10,4]"/>
+                <field name="error" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_kendrio_rpc_log_form" model="ir.ui.view">
+        <field name="name">kendrio.rpc.log.form</field>
+        <field name="model">kendrio.rpc.log</field>
+        <field name="arch" type="xml">
+            <form string="RPC Log Entry" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group string="Call">
+                            <field name="create_date"/>
+                            <field name="user_id"/>
+                            <field name="model"/>
+                            <field name="method"/>
+                            <field name="duration"/>
+                        </group>
+                        <group string="Error" invisible="not error">
+                            <field name="error" nolabel="1" widget="text"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Args">
+                            <field name="args_json" nolabel="1" widget="text" options="{'rows': 10}"/>
+                        </page>
+                        <page string="Kwargs">
+                            <field name="kwargs_json" nolabel="1" widget="text" options="{'rows': 10}"/>
+                        </page>
+                        <page string="Result">
+                            <field name="result_json" nolabel="1" widget="text" options="{'rows': 10}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_kendrio_rpc_log_search" model="ir.ui.view">
+        <field name="name">kendrio.rpc.log.search</field>
+        <field name="model">kendrio.rpc.log</field>
+        <field name="arch" type="xml">
+            <search string="RPC Logs">
+                <field name="model"/>
+                <field name="method"/>
+                <field name="user_id"/>
+                <filter string="Errors only" name="errors"
+                        domain="[('error', '!=', False), ('error', '!=', '')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_model" string="Model"   context="{'group_by': 'model'}"/>
+                    <filter name="group_method" string="Method" context="{'group_by': 'method'}"/>
+                    <filter name="group_user"  string="User"   context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_kendrio_rpc_log" model="ir.actions.act_window">
+        <field name="name">RPC Logs</field>
+        <field name="res_model">kendrio.rpc.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_kendrio_rpc_log_search"/>
+    </record>
+
+    <!-- ── RPC Logging settings wizard ──────────────────────────────── -->
+
+    <record id="view_kendrio_rpc_log_wizard_form" model="ir.ui.view">
+        <field name="name">kendrio.rpc.log.wizard.form</field>
+        <field name="model">kendrio.rpc.log.wizard</field>
+        <field name="arch" type="xml">
+            <form string="RPC Logging Settings">
+                <sheet>
+                    <group string="Recording">
+                        <field name="logging_enabled"/>
+                        <field name="log_count" readonly="1"/>
+                    </group>
+                    <p class="text-muted">
+                        When enabled every <b>call_kw</b> request (all ORM and custom method calls
+                        from the web client) is recorded. High-traffic instances generate many entries
+                        quickly — disable when not actively debugging.
+                    </p>
+                </sheet>
+                <footer>
+                    <button name="action_apply" type="object" string="Apply" class="btn-primary"/>
+                    <button name="action_clear_logs" type="object" string="Clear all logs"
+                            class="btn-danger" confirm="Delete all existing RPC log entries?"/>
+                    <button special="cancel" string="Close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_kendrio_rpc_log_wizard" model="ir.actions.act_window">
+        <field name="name">RPC Logging Settings</field>
+        <field name="res_model">kendrio.rpc.log.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kendrio_scanner_admin,kendrio.scanner (admin),model_kendrio_scanner,base.group_system,1,1,1,1
+access_kendrio_rpc_log_admin,kendrio.rpc.log (admin),model_kendrio_rpc_log,base.group_system,1,1,1,1
+access_kendrio_rpc_log_wizard_admin,kendrio.rpc.log.wizard (admin),model_kendrio_rpc_log_wizard,base.group_system,1,1,1,1

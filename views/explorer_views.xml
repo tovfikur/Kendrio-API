@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── API documentation ─────────────────────────────────────────── -->
+
+    <record id="action_kendrio_swagger" model="ir.actions.act_url">
+        <field name="name">Swagger UI</field>
+        <field name="url">/kendrio/swagger</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- ── Metadata actions (re-use Odoo native views) ───────────────── -->
+
+    <record id="action_kendrio_models" model="ir.actions.act_window">
+        <field name="name">Models</field>
+        <field name="res_model">ir.model</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('transient', '=', False)]</field>
+    </record>
+
+    <record id="action_kendrio_fields" model="ir.actions.act_window">
+        <field name="name">Fields</field>
+        <field name="res_model">ir.model.fields</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_kendrio_views" model="ir.actions.act_window">
+        <field name="name">Views</field>
+        <field name="res_model">ir.ui.view</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('active', '=', True)]</field>
+    </record>
+
+    <!-- Menus -->
+    <record id="action_kendrio_menus" model="ir.actions.act_window">
+        <field name="name">Menus</field>
+        <field name="res_model">ir.ui.menu</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('active', '=', True)]</field>
+    </record>
+
+    <!-- ── Action actions ─────────────────────────────────────────────── -->
+
+    <record id="action_kendrio_window_actions" model="ir.actions.act_window">
+        <field name="name">Window Actions</field>
+        <field name="res_model">ir.actions.act_window</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_kendrio_server_actions" model="ir.actions.act_window">
+        <field name="name">Server Actions</field>
+        <field name="res_model">ir.actions.server</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_kendrio_client_actions" model="ir.actions.act_window">
+        <field name="name">Client Actions</field>
+        <field name="res_model">ir.actions.client</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ── Security actions ───────────────────────────────────────────── -->
+
+    <record id="action_kendrio_acl" model="ir.actions.act_window">
+        <field name="name">Access Rules (ACL)</field>
+        <field name="res_model">ir.model.access</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_kendrio_record_rules" model="ir.actions.act_window">
+        <field name="name">Record Rules</field>
+        <field name="res_model">ir.rule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

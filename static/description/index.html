@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kendrio API Explorer — Odoo 17</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0F172A;
+    color: #E2E8F0;
+    line-height: 1.6;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 60%, #0F2544 100%);
+    border-bottom: 1px solid #1E3A5F;
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 600px 300px at 80% 50%, rgba(59,130,246,0.08), transparent);
+  }
+  .hero-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    position: relative;
+  }
+  .logo-wrap svg { flex-shrink: 0; }
+  .hero-text h1 {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+  .hero-text h1 span { color: #3B82F6; }
+  .hero-text .tagline {
+    font-size: 16px;
+    color: #94A3B8;
+    margin-top: 10px;
+  }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .badge-blue   { background: rgba(59,130,246,0.15);  color: #93C5FD; border: 1px solid rgba(59,130,246,0.3); }
+  .badge-orange { background: rgba(249,115,22,0.15);  color: #FDBA74; border: 1px solid rgba(249,115,22,0.3); }
+  .badge-green  { background: rgba(16,185,129,0.15);  color: #6EE7B7; border: 1px solid rgba(16,185,129,0.3); }
+  .badge-purple { background: rgba(139,92,246,0.15);  color: #C4B5FD; border: 1px solid rgba(139,92,246,0.3); }
+  .badge-gray   { background: rgba(100,116,139,0.15); color: #94A3B8; border: 1px solid rgba(100,116,139,0.3); }
+
+  /* Sections */
+  .section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 40px;
+    border-bottom: 1px solid #1E293B;
+  }
+  .section:last-child { border-bottom: none; }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 22px;
+    background: linear-gradient(to bottom, #3B82F6, #F97316);
+    border-radius: 2px;
+  }
+
+  p { color: #94A3B8; margin-bottom: 12px; }
+
+  /* Feature grid */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .feature-card {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .feature-card:hover { border-color: #3B82F6; }
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  .feature-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 6px;
+  }
+  .feature-card p {
+    font-size: 13px;
+    color: #64748B;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Endpoint table */
+  .ep-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  .ep-table thead tr {
+    border-bottom: 1px solid #334155;
+  }
+  .ep-table th {
+    text-align: left;
+    padding: 10px 12px;
+    color: #64748B;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .ep-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #1E293B;
+    vertical-align: top;
+  }
+  .ep-table tr:last-child td { border-bottom: none; }
+  .ep-table tr:hover td { background: rgba(59,130,246,0.04); }
+  .method {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .get { background: rgba(59,130,246,0.15); color: #60A5FA; }
+  .post { background: rgba(16,185,129,0.15); color: #34D399; }
+  .path { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; color: #E2E8F0; }
+  .ep-desc { color: #64748B; }
+
+  /* Steps */
+  .steps { display: flex; flex-direction: column; gap: 16px; }
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3B82F6, #2563EB);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-content h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+  }
+  .step-content p { font-size: 13px; color: #64748B; margin: 0; }
+
+  code {
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    background: #0F172A;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 12px;
+    color: #93C5FD;
+  }
+
+  pre {
+    background: #0F172A;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px;
+    color: #E2E8F0;
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+  pre .kw { color: #60A5FA; }
+  pre .str { color: #86EFAC; }
+  pre .num { color: #FDBA74; }
+  pre .cmt { color: #475569; }
+
+  /* Info box */
+  .info-box {
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #93C5FD;
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .info-box::before { content: 'ℹ'; font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Tech requirements */
+  .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .req-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .req-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .req-label { color: white; font-weight: 600; min-width: 140px; }
+  .req-val { color: #64748B; }
+
+  /* Footer */
+  .footer {
+    background: #0A1628;
+    border-top: 1px solid #1E293B;
+    padding: 24px 40px;
+    text-align: center;
+    font-size: 12px;
+    color: #334155;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="logo-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100" height="100">
+        <defs>
+          <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#0F172A"/>
+            <stop offset="100%" style="stop-color:#1E293B"/>
+          </linearGradient>
+          <linearGradient id="acc" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#3B82F6"/>
+            <stop offset="100%" style="stop-color:#2563EB"/>
+          </linearGradient>
+        </defs>
+        <rect width="128" height="128" rx="20" fill="url(#bg)"/>
+        <polygon points="64,30 84,41 84,63 64,74 44,63 44,41" fill="none" stroke="#3B82F6" stroke-width="1.5" opacity="0.6"/>
+        <rect x="48" y="34" width="5" height="36" rx="2" fill="url(#acc)"/>
+        <polygon points="53,52 72,34 78,34 60,52" fill="url(#acc)"/>
+        <polygon points="53,52 78,70 72,70 53,55" fill="url(#acc)"/>
+        <circle cx="80" cy="42" r="4" fill="#F97316"/>
+        <rect x="20" y="90" width="88" height="18" rx="4" fill="#3B82F6" opacity="0.15"/>
+        <text x="64" y="103" font-family="Arial,sans-serif" font-size="8.5" font-weight="700" fill="#93C5FD" text-anchor="middle" letter-spacing="2">API EXPLORER</text>
+      </svg>
+    </div>
+    <div class="hero-text">
+      <h1>Kendrio <span>API Explorer</span></h1>
+      <p class="tagline">Zero-configuration introspection, documentation &amp; live RPC recording for Odoo 17</p>
+      <div class="badges">
+        <span class="badge badge-blue">Odoo 17</span>
+        <span class="badge badge-green">OpenAPI 3.0</span>
+        <span class="badge badge-orange">Postman V2.1</span>
+        <span class="badge badge-purple">Swagger UI</span>
+        <span class="badge badge-gray">LGPL-3</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- What is it -->
+<div class="section">
+  <h2>What is Kendrio API Explorer?</h2>
+  <p>
+    Kendrio API Explorer is a powerful zero-configuration module that automatically scans every installed Odoo model,
+    field, relation, view, action, menu, HTTP route, ORM method, access rule, record rule, state machine, and
+    context/domain pattern — then exposes everything as a live interactive REST API, an OpenAPI 3.0 specification,
+    and a Postman Collection.
+  </p>
+  <p>
+    Stop writing API documentation by hand. Install the module, navigate to <strong>API Explorer → Swagger UI</strong>,
+    and every model in your Odoo instance is already documented with real schema definitions, example payloads,
+    authentication scripts, and try-it-out support.
+  </p>
+</div>
+
+<!-- Features -->
+<div class="section">
+  <h2>Key Features</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(59,130,246,0.15)">🔍</div>
+      <h3>Full Model Introspection</h3>
+      <p>Scans every installed model: fields, types, relations, required/readonly/tracking flags, and Python-level ORM methods.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(16,185,129,0.15)">📄</div>
+      <h3>OpenAPI 3.0 Generator</h3>
+      <p>Live OpenAPI 3.0 spec with model schemas, JSON-RPC &amp; XML-RPC endpoint docs, and full CRUD examples.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(249,115,22,0.15)">📬</div>
+      <h3>Postman Collection V2.1</h3>
+      <p>Generates a ready-to-import Postman collection with session auth pre-request script and per-model CRUD requests.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(139,92,246,0.15)">🖥️</div>
+      <h3>Swagger UI</h3>
+      <p>Embedded Swagger UI at <code>/kendrio/swagger</code> — explore and test every endpoint directly in the browser.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(239,68,68,0.15)">⚡</div>
+      <h3>Live RPC Interceptor</h3>
+      <p>Records real <code>call_kw</code> payloads and responses with timing. Survives transaction rollbacks via an isolated cursor.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(59,130,246,0.15)">🔀</div>
+      <h3>State Machine Detector</h3>
+      <p>Detects workflows: selection state fields, stage_id Many2ones, statusbar widgets, and state-dependent buttons.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(16,185,129,0.15)">🛡️</div>
+      <h3>ACL &amp; Record Rules</h3>
+      <p>Lists access rules and record rules per model with group membership and domain expressions.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(249,115,22,0.15)">🗺️</div>
+      <h3>Route &amp; Menu Scanner</h3>
+      <p>Enumerates all HTTP routes from the Werkzeug routing map and all UI menu items with their actions.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(139,92,246,0.15)">📐</div>
+      <h3>Context/Domain Analyzer</h3>
+      <p>Extracts context keys and domain patterns from field definitions, view arch, and action defaults.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Start -->
+<div class="section">
+  <h2>Quick Start</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Install the module</h4>
+        <p>Go to <strong>Apps</strong>, search for <strong>Kendrio API Explorer</strong>, click Install. Requires Odoo 17 CE or EE.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Open the Swagger UI</h4>
+        <p>Navigate to <strong>API Explorer → Swagger UI</strong> in the main menu, or go directly to <code>/kendrio/swagger</code>. Requires Administrator access.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Export Postman Collection</h4>
+        <p>Download a ready-to-use Postman collection from <code>/kendrio/api/postman.json</code> or via the Swagger UI download button.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Enable RPC Recording (optional)</h4>
+        <p>Go to <strong>API Explorer → RPC Logs → Settings</strong>, enable recording, and every ORM call from the web client will be logged with full payloads.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-box">
+    All endpoints are protected by <strong>Settings / Technical</strong> (<code>base.group_system</code>) access. Only Odoo Administrators can use the API Explorer.
+  </div>
+</div>
+
+<!-- REST Endpoints -->
+<div class="section">
+  <h2>REST API Endpoints</h2>
+  <p>All endpoints are <code>GET</code> and require an active Odoo session with Administrator rights. The base URL is your Odoo instance root (e.g. <code>https://odoo.example.com</code>).</p>
+
+  <table class="ep-table">
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Path</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/swagger</td>
+        <td class="ep-desc">Interactive Swagger UI (HTML)</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/openapi.json</td>
+        <td class="ep-desc">Full OpenAPI 3.0 specification (JSON)</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/postman.json</td>
+        <td class="ep-desc">Postman Collection V2.1 download</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/models</td>
+        <td class="ep-desc">List all installed models</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/models/{name}</td>
+        <td class="ep-desc">Model detail (fields, methods, relations)</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/models/{name}/fields</td>
+        <td class="ep-desc">All field definitions for a model</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/models/{name}/methods</td>
+        <td class="ep-desc">ORM and custom methods with signatures</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/models/{name}/views/{type}</td>
+        <td class="ep-desc">Parsed view arch (form, tree, kanban, search)</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/models/{name}/rpc</td>
+        <td class="ep-desc">RPC example payload for any method</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/models/{name}/state-machine</td>
+        <td class="ep-desc">State machine definition and transitions</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/models/{name}/context</td>
+        <td class="ep-desc">Context keys and domain patterns</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/models/{name}/actions</td>
+        <td class="ep-desc">All actions bound to a model</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/routes</td>
+        <td class="ep-desc">All HTTP routes from the routing map</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/menus</td>
+        <td class="ep-desc">UI menu tree</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/actions</td>
+        <td class="ep-desc">All actions (window, server, client)</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/acl</td>
+        <td class="ep-desc">Model access rules (ir.model.access)</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/acl/rules</td>
+        <td class="ep-desc">Record rules (ir.rule) with domains</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/modules</td>
+        <td class="ep-desc">Installed modules with metadata</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/server-actions</td>
+        <td class="ep-desc">Server actions (ir.actions.server)</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/rpc-logs</td>
+        <td class="ep-desc">Recent RPC log entries</td>
+      </tr>
+      <tr>
+        <td><span class="method get">GET</span></td>
+        <td class="path">/kendrio/api/rpc-logs/status</td>
+        <td class="ep-desc">RPC logging status and log count</td>
+      </tr>
+      <tr>
+        <td><span class="method post">POST</span></td>
+        <td class="path">/kendrio/api/rpc-logs/toggle</td>
+        <td class="ep-desc">Enable/disable RPC recording</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Example: calling a model endpoint -->
+<div class="section">
+  <h2>Example: Fetch a Model's Schema</h2>
+  <pre><span class="cmt"># Using Python requests</span>
+<span class="kw">import</span> requests
+
+session = requests.Session()
+
+<span class="cmt"># 1. Authenticate</span>
+session.post(<span class="str">"https://odoo.example.com/web/session/authenticate"</span>, json={
+    <span class="str">"jsonrpc"</span>: <span class="str">"2.0"</span>, <span class="str">"method"</span>: <span class="str">"call"</span>,
+    <span class="str">"params"</span>: {<span class="str">"db"</span>: <span class="str">"mydb"</span>, <span class="str">"login"</span>: <span class="str">"admin"</span>, <span class="str">"password"</span>: <span class="str">"admin"</span>}
+})
+
+<span class="cmt"># 2. Get sale.order schema</span>
+r = session.get(<span class="str">"https://odoo.example.com/kendrio/api/models/sale.order"</span>)
+model = r.json()
+
+<span class="cmt"># 3. Get OpenAPI spec for specific models</span>
+r = session.get(<span class="str">"https://odoo.example.com/kendrio/api/openapi.json"</span>,
+                params={<span class="str">"models"</span>: <span class="str">"sale.order,account.move"</span>})
+spec = r.json()  <span class="cmt"># OpenAPI 3.0 dict</span></pre>
+</div>
+
+<!-- Technical Requirements -->
+<div class="section">
+  <h2>Technical Requirements</h2>
+  <div class="req-list">
+    <div class="req-item">
+      <div class="req-dot" style="background:#3B82F6"></div>
+      <span class="req-label">Odoo Version</span>
+      <span class="req-val">17.0 Community or Enterprise</span>
+    </div>
+    <div class="req-item">
+      <div class="req-dot" style="background:#10B981"></div>
+      <span class="req-label">Python</span>
+      <span class="req-val">3.10 or higher</span>
+    </div>
+    <div class="req-item">
+      <div class="req-dot" style="background:#F97316"></div>
+      <span class="req-label">Dependencies</span>
+      <span class="req-val">base, web (standard Odoo modules — no extra pip packages)</span>
+    </div>
+    <div class="req-item">
+      <div class="req-dot" style="background:#8B5CF6"></div>
+      <span class="req-label">Access</span>
+      <span class="req-val">Odoo Administrator (Settings / Technical) — base.group_system</span>
+    </div>
+    <div class="req-item">
+      <div class="req-dot" style="background:#EF4444"></div>
+      <span class="req-label">License</span>
+      <span class="req-val">LGPL-3</span>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Kendrio API Explorer v17.0.2.0.0 · LGPL-3 · github.com/tovfikur/Kendrio-API · tovfikur@gmail.com
+</div>
+
+</body>
+</html>

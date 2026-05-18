@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_kendrio_root"
+              name="API Explorer"
+              sequence="99"
+              groups="base.group_system"/>
+
+    <!-- ── Metadata ──────────────────────────────────────────────────── -->
+    <menuitem id="menu_kendrio_metadata"
+              name="Metadata"
+              parent="menu_kendrio_root"
+              sequence="10"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_kendrio_models"
+              name="Models"
+              parent="menu_kendrio_metadata"
+              action="action_kendrio_models"
+              sequence="10"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_kendrio_fields"
+              name="Fields"
+              parent="menu_kendrio_metadata"
+              action="action_kendrio_fields"
+              sequence="20"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_kendrio_views"
+              name="Views"
+              parent="menu_kendrio_metadata"
+              action="action_kendrio_views"
+              sequence="30"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_kendrio_menus"
+              name="Menus"
+              parent="menu_kendrio_metadata"
+              action="action_kendrio_menus"
+              sequence="40"
+              groups="base.group_system"/>
+
+    <!-- ── Actions ───────────────────────────────────────────────────── -->
+    <menuitem id="menu_kendrio_actions"
+              name="Actions"
+              parent="menu_kendrio_root"
+              sequence="20"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_kendrio_window_actions"
+              name="Window Actions"
+              parent="menu_kendrio_actions"
+              action="action_kendrio_window_actions"
+              sequence="10"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_kendrio_server_actions"
+              name="Server Actions"
+              parent="menu_kendrio_actions"
+              action="action_kendrio_server_actions"
+              sequence="20"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_kendrio_client_actions"
+              name="Client Actions"
+              parent="menu_kendrio_actions"
+              action="action_kendrio_client_actions"
+              sequence="30"
+              groups="base.group_system"/>
+
+    <!-- ── Security ──────────────────────────────────────────────────── -->
+    <menuitem id="menu_kendrio_security"
+              name="Security"
+              parent="menu_kendrio_root"
+              sequence="30"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_kendrio_acl"
+              name="Access Rules (ACL)"
+              parent="menu_kendrio_security"
+              action="action_kendrio_acl"
+              sequence="10"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_kendrio_record_rules"
+              name="Record Rules"
+              parent="menu_kendrio_security"
+              action="action_kendrio_record_rules"
+              sequence="20"
+              groups="base.group_system"/>
+
+    <!-- ── RPC Recorder ──────────────────────────────────────────────── -->
+    <menuitem id="menu_kendrio_rpc"
+              name="RPC Logs"
+              parent="menu_kendrio_root"
+              sequence="40"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_kendrio_rpc_logs"
+              name="Log Entries"
+              parent="menu_kendrio_rpc"
+              action="action_kendrio_rpc_log"
+              sequence="10"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_kendrio_rpc_settings"
+              name="Settings (enable / disable)"
+              parent="menu_kendrio_rpc"
+              action="action_kendrio_rpc_log_wizard"
+              sequence="20"
+              groups="base.group_system"/>
+
+    <!-- ── API Docs ───────────────────────────────────────────────────── -->
+    <menuitem id="menu_kendrio_swagger"
+              name="Swagger UI"
+              parent="menu_kendrio_root"
+              action="action_kendrio_swagger"
+              sequence="50"
+              groups="base.group_system"/>
+
+</odoo>
