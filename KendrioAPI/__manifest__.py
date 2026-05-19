@@ -25,7 +25,7 @@ Key capabilities
 * Postman Collection V2.1 generator with auth script and per-model CRUD
 * All endpoints admin-gated (base.group_system)
     """,
-    'author': 'Odoo Command Center',
+    'author': 'Tovfikur Rahman',
     'website': 'https://github.com/tovfikur',
     'support': 'tovfikur@gmail.com',
     'license': 'LGPL-3',
